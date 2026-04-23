@@ -44,7 +44,14 @@ def ingest_event(
         if status_code == 200:
             http_response.status_code = 200
 
-        return EventResponse.model_validate(event)
+        return EventResponse.model_validate({
+            "id": event.id,
+            "event_id": event.event_id,
+            "transaction_id": request.transaction_id,
+            "event_type": event.event_type,
+            "timestamp": event.timestamp,
+            "created_at": event.created_at,
+        })
 
     except APIException as e:
         raise HTTPException(status_code=e.status_code, detail=str(e.message))

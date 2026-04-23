@@ -80,7 +80,14 @@ def list_transactions(
                 status=txn.status,
                 created_at=txn.created_at,
                 updated_at=txn.updated_at,
-                events=[EventResponse.model_validate(e) for e in txn.events],
+                events=[EventResponse.model_validate({
+                    "id": e.id,
+                    "event_id": e.event_id,
+                    "transaction_id": txn.transaction_id,
+                    "event_type": e.event_type,
+                    "timestamp": e.timestamp,
+                    "created_at": e.created_at,
+                }) for e in txn.events],
             )
             transaction_details.append(detail)
 
@@ -140,7 +147,14 @@ def get_transaction(
             status=transaction.status,
             created_at=transaction.created_at,
             updated_at=transaction.updated_at,
-            events=[EventResponse.model_validate(e) for e in transaction.events],
+            events=[EventResponse.model_validate({
+                "id": e.id,
+                "event_id": e.event_id,
+                "transaction_id": transaction.transaction_id,
+                "event_type": e.event_type,
+                "timestamp": e.timestamp,
+                "created_at": e.created_at,
+            }) for e in transaction.events],
         )
 
     except APIException as e:

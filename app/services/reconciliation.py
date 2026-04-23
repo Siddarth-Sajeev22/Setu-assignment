@@ -44,7 +44,6 @@ class ReconciliationService:
                     dimension_type="all",
                     transaction_count=row[0] or 0,
                     total_amount=Decimal(str(row[1] or 0)),
-                    status_breakdown={}
                 )
             else:
                 # Row format: (dimension, transaction_count, total_amount)
@@ -53,7 +52,6 @@ class ReconciliationService:
                     dimension_type=group_by,
                     transaction_count=row[1] or 0,
                     total_amount=Decimal(str(row[2] or 0)),
-                    status_breakdown={}
                 )
             summaries.append(summary)
 
@@ -87,7 +85,14 @@ class ReconciliationService:
                 status=transaction.status,
                 discrepancy_type=discrepancy_type,
                 reason=reason,
-                events=[EventResponse.model_validate(e) for e in transaction.events],
+                events=[EventResponse.model_validate({
+                    "id": e.id,
+                    "event_id": e.event_id,
+                    "transaction_id": transaction.transaction_id,
+                    "event_type": e.event_type,
+                    "timestamp": e.timestamp,
+                    "created_at": e.created_at,
+                }) for e in transaction.events],
                 created_at=transaction.created_at,
             )
             discrepancy_items.append(item)

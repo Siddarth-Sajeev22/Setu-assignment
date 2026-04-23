@@ -4,6 +4,7 @@ import os
 import sys
 from typing import Optional
 
+from dotenv import load_dotenv
 import httpx
 
 
@@ -50,6 +51,7 @@ def load_events_from_file(filepath: str, base_url: str, sample_size: Optional[in
 
 
 if __name__ == "__main__":
+    load_dotenv()
     filepath = os.path.join(os.path.dirname(__file__), "..", "sample_events.json")
 
     if not os.path.exists(filepath):

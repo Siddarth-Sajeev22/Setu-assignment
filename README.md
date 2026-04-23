@@ -317,6 +317,8 @@ The Postman collection (`postman_collection.json`) is included in the repository
 
 **Merchant deduplication is upsert-style.** If a `payment_initiated` event arrives for a known `merchant_id` but with a different `merchant_name`, the existing merchant record is returned as-is and the name is not updated. This avoids a write on every event for an established merchant and keeps merchant data stable.
 
+**State machine and reconciliation are intentionally separate layers.** The state machine at ingestion time rejects logically impossible transitions (e.g. a settled transaction receiving further events, or a transaction starting with anything other than `payment_initiated`). The reconciliation endpoints then operate on data that already passed those checks, detecting business-level inconsistencies — a transaction stuck in `processed` with no settlement following, a settlement recorded alongside a failed event (which can occur when events arrive from multiple upstream systems out of order), or duplicate initiation events. These two layers complement each other; the reconciliation endpoints are not intended to re-detect what the state machine already prevented.
+
 **Discrepancy detection is point-in-time.** The discrepancy queries reflect the current state of the database. They are not stored or cached — each call to `/reconciliation/discrepancies` runs the SQL subqueries live. This is fine at current scale; at higher volume a materialised view or a background job could precompute results.
 
 **No soft deletes or audit trail for transactions.** The assignment does not require it, and adding it would complicate the schema and queries without a stated need.

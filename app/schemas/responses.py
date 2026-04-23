@@ -9,12 +9,10 @@ class EventResponse(BaseModel):
     """Response schema for payment events."""
     id: int
     event_id: str
-    transaction_id: int  # FK to transaction
+    transaction_id: str  # UUID string, not internal FK
     event_type: str
     timestamp: datetime
     created_at: datetime
-
-    model_config = ConfigDict(from_attributes=True)
 
 
 class TransactionDetailResponse(BaseModel):
@@ -53,7 +51,6 @@ class SummaryStat(BaseModel):
     dimension_type: str  # "merchant", "date", or "status"
     transaction_count: int
     total_amount: Decimal
-    status_breakdown: dict  # {status: count}
 
 
 class ReconciliationSummaryResponse(BaseModel):
