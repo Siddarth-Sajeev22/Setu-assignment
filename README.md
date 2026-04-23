@@ -237,7 +237,7 @@ Returns service and database connectivity status.
 **1. Clone the repository and create a virtual environment:**
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/Siddarth-Sajeev22/Setu-assignment.git
 cd Setu-assignment
 python -m venv .venv
 ```
@@ -305,9 +305,11 @@ The script POSTs each event to `POST /events` and prints a summary of new events
 
 ## Deployment
 
-The database is hosted on Supabase (PostgreSQL). The application can be deployed to any platform that supports Python — Render, Railway, Fly.io, or similar. Set the `DATABASE_URL` environment variable on your platform to point to the Supabase connection string.
+The database is hosted on Supabase (PostgreSQL). The application is deployed on Render at `https://setu-assignment.onrender.com`.
 
-The Postman collection (`postman_collection.json`) is included in the repository. Import it into Postman and update the `base_url` collection variable to point to your deployed URL or `http://localhost:8000` for local testing.
+Render's free tier spins down instances after periods of inactivity. The first request after a period of inactivity may take 30–60 seconds to respond while the instance warms up. If the first few requests time out or return an error, wait a moment and retry — subsequent requests will be fast.
+
+The Postman collection (`Payment Events Service.postman_collection.json`) is included in the repository. Import it into Postman — the `base_url` variable is already set to the deployed URL.
 
 ---
 
